@@ -225,7 +225,24 @@ def calculateMinimumHP(A):
     c = len(A[0])
     dp = [ [-1 for _ in range(c+1)] for _ in range(r+1) ]
     
-    return minimumHP(0, 0, A, dp, r, c)
+    dp[r-1][c-1] = max(1, 1-A[r-1][c-1])
+
+    for i in range(r-1,-1,-1):
+        for j in range(c-1,-1,-1):
+            if i == r-1 and j == c-1:
+                continue
+
+            if i == r-1:
+                dp[i][j] = max(1, dp[i][j+1]-A[i][j])
+            
+            elif j == c-1:
+                dp[i][j] = max(1, dp[i+1][j]-A[i][j])
+            
+            else:
+                dp[i][j] = max( min(dp[i+1][j], dp[i][j+1])-A[i][j], 1 )
+    
+    return dp[0][0]
+
 
 
 def minimumHP(row, col, grid, dp, n, m):
