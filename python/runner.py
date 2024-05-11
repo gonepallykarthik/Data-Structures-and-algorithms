@@ -159,7 +159,28 @@ def knapsack2(A,B,C):
         if dp[n][i] <= C:
             return i
 
-print(knapsack2([6,10,12], [10,20,30], 50))
+# print(knapsack2([6,10,12], [10,20,30], 50))
+
+def solve(nums):
+    if len(nums) == 0:
+        return 0
+    dict = {0:1}
+    ans = 0
+    prefixSum = 0
+
+    for i in range(len(nums)):
+        prefixSum += nums[i]
+        if prefixSum in dict:
+            ans += dict[prefixSum]
+        
+        if prefixSum not in dict:
+            dict[prefixSum] = 0
+        
+        dict[prefixSum] += 1
+    
+    print('a is ', ans)
+
+solve([6,-1,-3,4,-2,2,4,6,-12,-2])
 
 
 
