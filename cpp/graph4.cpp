@@ -86,12 +86,122 @@ vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
     }
     return res;
 }
+bool dfs_traversal(int src, int des, vector<vector<int>>& graph, vector<int>& visited) {
+    visited[src] = 1;
+    if (src == des) {
+        return true;
+    }
 
+    for (auto neighbor : graph[src]) {
+        if (visited[neighbor] == -1) {
+            if (dfs_traversal(neighbor, des, graph, visited)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+
+bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
+    vector<vector<int>> graph(n);
+    vector<int> visited(n, -1);
+    for (auto edge : edges) {
+        int src = edge[0];
+        int des = edge[1];
+        graph[src].push_back(des);
+        graph[des].push_back(src);
+    }
+    return dfs_traversal(source, destination, graph, visited);
+}
+int findJudge(int n, vector<vector<int>>& trust) {
+    vector<vector<int>> graph(n + 1);
+    for (auto edge : trust) {
+        graph[edge[0]].push_back(edge[1]);
+    }
+
+    int trusted_person = -1;
+    for (int i = 1; i <= n; i++) {
+        if (graph[i].size() == 0) {
+            trusted_person = i;
+        }
+    }
+
+    if (trusted_person == -1)return -1;
+    vector<int> nodes = graph[trusted_person];
+    for (auto node : nodes) {
+        bool trust = false;
+        for (int i = 1; i <= n; i++) {
+            if (i == node) trust = true;
+        }
+        if (trust == false) return -1;
+    }
+
+    return trusted_person;
+}
+
+bool DFS_Traversal(int src, vector<int>& visited, vector<int>& path, vector<vector<int>>& graph) {
+    visited[src] = 1;
+    path[src] = 1;
+    for (auto neighbor : graph[src]) {
+        if (path[neighbor] == 1) {
+            return true;
+        }
+    }
+
+    for (auto neighbor : graph[src]) {
+        if (visited[neighbor] == -1) {
+            if (DFS_Traversal(neighbor, visited, path, graph)) {
+                return true;
+            }
+        }
+    }
+
+    path[src] = 0;
+    visited[src] = -1;
+    return false;
+}
+
+vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+    int n = graph.size();
+    vector<int> visited(n, -1);
+    vector<int> path(n, 0);
+    vector<int> res;
+    for (int i = 0; i < n; i++) {
+        if (visited[i] == -1) {
+            if (DFS_Traversal(i, visited, path, graph) == false) {
+                res.push_back(i);
+            }
+        }
+    }
+
+    return res;
+}
 
 int main() {
     // cout << "welcome";
-    int numCourses = 4;
-    vector<vector<int>> prerequisites = { {1, 0}, {2, 0}, {3, 1}, {3, 2} };
-    findOrder(numCourses, prerequisites);
+    // int numCourses = 4;
+    // vector<vector<int>> prerequisites = { {1, 0}, {2, 0}, {3, 1}, {3, 2} };
+    // findOrder(numCourses, prerequisites);
+
+    // int n = 6;
+    // vector<vector<int>> edges = { {0,1} ,{0,2} ,{3,5} ,{5,4}, {4,3} };
+    // int source = 0;
+    // int destination = 5;
+    // bool r = validPath(n, edges, source, destination);
+    // cout << r;
+
+    // int n = 3;
+    // vector<vector<int>> edges = { {1,2}, {2,3} };
+    // int res = findJudge(n, edges);
+    // cout << res;
+
+    vector<vector<int>> graph = { {1, 2}, {2, 3}, {5}, {0}, {5}, {}, {} };
+    vector<int> res = eventualSafeNodes(graph);
+    for (auto num : res) {
+        cout << num << "\t";
+    }
+
     return 0;
 }

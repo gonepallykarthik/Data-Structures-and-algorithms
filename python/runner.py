@@ -3,6 +3,9 @@
     # @param C : list of integers
     # @param D : integer
     # @return an integer
+from typing import List
+
+
 def solve(A, B, C, D):
     if D == 0:
         return 0
@@ -180,8 +183,120 @@ def solve(nums):
     
     print('a is ', ans)
 
-solve([6,-1,-3,4,-2,2,4,6,-12,-2])
+# solve([6,-1,-3,4,-2,2,4,6,-12,-2])
+
+def sumPossible(amount, nums):
+    return sumHelper(amount, nums)
+
+def sumHelper(amount, nums):
+    if amount == 0:
+        return 0
+    if amount < 0:
+        return float('inf')
+    
+    ans = float('inf')
+    for num in nums:
+        ans = min(ans,  1 + sumHelper(amount-num, nums))
+    
+    return ans
+
+# print(sumPossible(5, [1,2,3]))
+def nonAdjacentSum(nums):
+    return nonAjacentHelper(len(nums)-1, nums)
+
+def nonAjacentHelper(idx, nums):
+    if idx == 0:
+        return nums[0]
+    
+    if idx < 0:
+        return 0
+    
+    pick = nums[idx] + nonAjacentHelper(idx-2, nums)
+    dontPick = 0 + nonAjacentHelper(idx-1, nums)
+
+    return max(pick, dontPick)
+
+# print(nonAdjacentSum([2,4,5,12,7]))
+
+def summingSquare(num):
+    if num == 0:
+        return 0
+    return summingSquareHelper(num)
+
+def summingSquareHelper(num):
+    if num == 0:
+        return 0
+    
+    if num < 0:
+        return float('inf')
+
+    ans = float('inf')
+    for i in range(1, num+1):
+        if num - (i*i) >= 0:
+            ans = min(ans, 1 + summingSquareHelper(num-(i*i)))
+    
+    return ans
+
+# print(summingSquare(12))
+
+def closedIsland(grid: List[List[int]]) -> int:
+    n = len(grid)
+    m = len(grid[0])
+
+    for row in range(n):
+        if grid[row][0] == 0:
+            Traversal(row,0,grid)
+
+        if grid[row][m-1] == 0:
+            Traversal(row, m-1, grid)
+
+    for col in range(m):
+        if grid[0][col] == 0:
+            Traversal(0, col, grid)
+
+        if grid[n-1][col] == 0:
+            Traversal(n-1, col, grid)
+
+    visited = [ [-1 for _ in range(m)] for _ in range(n) ] 
+    ans = 0
+    for row in  range(n):
+        for col in range(m):
+            if grid[row][col] == 0 and visited[row][col] == -1:
+                ans += 1
+                dfsTraversal(row, col, grid, visited)
+    return ans
+
+def dfsTraversal(row, col, grid, visited):
+    n = len(grid)
+    m = len(grid[0])
+
+    visited[row][col] = 1
+    dr = [-1,0,1,0]
+    dc = [0,-1,0,1]
+    for i in range(4):
+        new_row = row + dr[i]
+        new_col = col + dc[i]
+        if new_row >=0 and new_row < n and new_col >=0 and new_col < m and grid[new_row][new_col] == 0 and visited[new_row][new_col] == -1:
+            dfsTraversal(new_row, new_col, grid, visited)
 
 
+def Traversal(row, col, grid):
+    n = len(grid)
+    m = len(grid[0])
+    grid[row][col] = 2
+    dr = [-1, 0, 1, 0]
+    dc = [0, -1, 0, 1]
+
+    for i in range(4):
+        new_row = row + dr[i]
+        new_col = col + dc[i]
+        
+        if new_row >=0 and new_row < n and new_col >=0 and new_col < m and grid[new_row][new_col] == 0:
+            Traversal(new_row, new_col, grid)
+
+
+
+grid = [[1,1,1,1,1,1,1,0],[1,0,0,0,0,1,1,0],[1,0,1,0,1,1,1,0],[1,0,0,0,0,1,0,1],[1,1,1,1,1,1,1,0]]
+print(closedIsland(grid))
 
 
