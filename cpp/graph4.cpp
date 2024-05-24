@@ -178,6 +178,60 @@ vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
 
     return res;
 }
+void Traversal(int node, vector<vector<int>>& graph, vector<int>& informTime, int& ans, int& maxi, vector<int>& visited) {
+    visited[node] = 1;
+    maxi = max(ans, maxi);
+
+    for (auto neighbor : graph[node]) {
+        if (visited[neighbor] == -1) {
+            ans += informTime[node];
+            Traversal(neighbor, graph, informTime, ans, maxi, visited);
+            ans -= informTime[node];
+        }
+    }
+}
+
+int numOfMinutes(int n, int headID, vector<int>& manager, vector<int>& informTime) {
+    vector<vector<int>> graph(n);
+    vector<int> visited(n, -1);
+    for (int i = 0; i < n; i++) {
+        if (manager[i] != -1) {
+            graph[manager[i]].push_back(i);
+        }
+    }
+    int ans = 0;
+    int maxi = 0;
+    Traversal(headID, graph, informTime, ans, maxi, visited);
+    return maxi;
+}
+int dfstraversal(int node, int cost, vector<vector<int>>& graph, vector<int>& visited, vector<bool>& hasApple) {
+    if (visited[node] == 1) {
+        return 0;
+    }
+    visited[node] = 1;
+    int childCost = 0;
+    for (auto neighbor : graph[node]) {
+        childCost += dfstraversal(neighbor, 2, graph, visited, hasApple);
+    }
+    if (childCost == 0 && !hasApple[node]) {
+        return 0;
+    }
+
+    return cost + childCost;
+}
+
+int minTime(int n, vector<vector<int>>& edges, vector<bool>& hasApple) {
+    vector<vector<int>> graph(n);
+    int m = edges.size();
+    for (int i = 0; i < m; i++) {
+        int src = edges[i][0];
+        int des = edges[i][1];
+        graph[src].push_back(des);
+        graph[des].push_back(src);
+    }
+    vector<int> visited(n, -1);
+    return dfstraversal(0, 0, graph, visited, hasApple);
+}
 
 int main() {
     // cout << "welcome";
@@ -197,11 +251,20 @@ int main() {
     // int res = findJudge(n, edges);
     // cout << res;
 
-    vector<vector<int>> graph = { {1, 2}, {2, 3}, {5}, {0}, {5}, {}, {} };
-    vector<int> res = eventualSafeNodes(graph);
-    for (auto num : res) {
-        cout << num << "\t";
-    }
-
+    // vector<vector<int>> graph = { {1, 2}, {2, 3}, {5}, {0}, {5}, {}, {} };
+    // vector<int> res = eventualSafeNodes(graph);
+    // for (auto num : res) {
+    //     cout << num << "\t";
+    // }
+    // int n = 6;
+    // int headID = 2;
+    // vector<int> manager = { 2, 2, -1, 2, 2, 2 };
+    // vector<int> informTime = { 0, 0, 1, 0, 0, 0 };
+    // int minutes = numOfMinutes(n, headID, manager, informTime);
+    // cout << minutes << endl;
+    int n = 7;
+    vector<vector<int>> edges = { {0, 1}, {0, 2}, {1, 4}, {1, 5}, {2, 3}, {2, 6} };
+    vector<bool> apples = { false, false, true, false, true, true, false };
+    minTime(n, edges, apples);
     return 0;
 }

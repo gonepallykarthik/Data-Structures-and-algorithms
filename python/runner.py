@@ -295,7 +295,6 @@ def Traversal(row, col, grid):
             Traversal(new_row, new_col, grid)
 
 
-
 grid = [[1,1,1,1,1,1,1,0],[1,0,0,0,0,1,1,0],[1,0,1,0,1,1,1,0],[1,0,0,0,0,1,0,1],[1,1,1,1,1,1,1,0]]
 print(closedIsland(grid))
 
