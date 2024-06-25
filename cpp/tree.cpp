@@ -257,19 +257,21 @@ int TwoSumBST(TreeNode* root, int target) {
 
         }
     }
-
     return 0;
-
 }
 
 
-
-
 int main() {
-    cout << "welcome to the application" << endl;
-    int r = subarraysWithKDistinct(vector<int>{1, 2, 1, 3, 4}, 3);
-    cout << r << endl;
-    string str = "Hello World";
-    cout << str.size();
+    // cout << "welcome to the application" << endl;
+    // int r = subarraysWithKDistinct(vector<int>{1, 2, 1, 3, 4}, 3);
+    // cout << r << endl;
+    // string str = "Hello World";
+    // cout << str.size();
+    int a = 10;
+    int b = 20;
+    a = a ^ b;
+    b = a ^ b;
+    a = a ^ b;
+    cout << a << "\t" << b << endl;
     return 0;
 }
