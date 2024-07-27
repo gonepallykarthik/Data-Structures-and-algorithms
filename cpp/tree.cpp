@@ -267,11 +267,12 @@ int main() {
     // cout << r << endl;
     // string str = "Hello World";
     // cout << str.size();
-    int a = 10;
-    int b = 20;
-    a = a ^ b;
-    b = a ^ b;
-    a = a ^ b;
-    cout << a << "\t" << b << endl;
+    // int a = 10;
+    // int b = 20;
+    // a = a ^ b;
+    // b = a ^ b;
+    // a = a ^ b;
+    // cout << a << "\t" << b << endl;
+    cout << 0 || 0;
     return 0;
 }
