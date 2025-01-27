@@ -11,11 +11,12 @@ public class Dota {
         for (int i = 0; i < res.length; i++) {
             Arrays.fill(res[i], -1);
         }
+
         Queue<int[]> pq = new LinkedList<>();
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (isWater[i][j] == 1) {
-                    pq.add(new int[] { i, j });
+                    pq.add(new int[]{i, j});
                     res[i][j] = 0;
                 }
             }
@@ -25,13 +26,13 @@ public class Dota {
             int[] topEle = pq.poll();
             int row = topEle[0];
             int col = topEle[1];
-            int[][] directions = new int[][] { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+            int[][] directions = new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
             for (int[] dir : directions) {
                 int new_row = row + dir[0];
                 int new_col = col + dir[1];
                 if (new_row >= 0 && new_row < m && new_col >= 0 && new_col < n && res[new_row][new_col] == -1) {
                     res[new_row][new_col] = 1 + res[row][col];
-                    pq.add(new int[] { new_row, new_col });
+                    pq.add(new int[]{new_row, new_col});
                 }
             }
         }
@@ -48,23 +49,24 @@ public class Dota {
         PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
         for (int row = 0; row < m; row++) {
             visited[row][0] = true;
-            pq.add(new int[] { heightMap[row][0], row, 0 });
+            pq.add(new int[]{heightMap[row][0], row, 0});
         }
 
         for (int col = 1; col < n; col++) {
             visited[0][col] = true;
-            pq.add(new int[] { heightMap[0][col], 0, col });
+            pq.add(new int[]{heightMap[0][col], 0, col});
         }
 
         for (int row = 1; row < m; row++) {
             visited[row][n - 1] = true;
-            pq.add(new int[] { heightMap[row][n - 1], row, n - 1 });
+            pq.add(new int[]{heightMap[row][n - 1], row, n - 1});
         }
 
         for (int col = n - 2; col >= 1; col--) {
             visited[m - 1][col] = true;
-            pq.add(new int[] { heightMap[m - 1][col], m - 1, col });
+            pq.add(new int[]{heightMap[m - 1][col], m - 1, col});
         }
+
 
         while (!pq.isEmpty()) {
             int[] topEle = pq.poll();
@@ -72,7 +74,7 @@ public class Dota {
             int row = topEle[1];
             int col = topEle[2];
 
-            int[][] directions = new int[][] { { -1, 0 }, { 1, 0 }, { 0, 1 }, { 0, -1 } };
+            int[][] directions = new int[][]{{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
 
             for (int[] dir : directions) {
                 int new_row = row + dir[0];
@@ -81,13 +83,14 @@ public class Dota {
                     visited[new_row][new_col] = true;
                     int trap = heightMap[row][col] - heightMap[new_row][new_col];
                     waterTrap += Math.max(trap, 0);
-                    pq.add(new int[] { Math.max(heightMap[row][col], heightMap[new_row][new_col]), new_row, new_col });
+                    pq.add(new int[]{Math.max(heightMap[row][col], heightMap[new_row][new_col]), new_row, new_col});
                 }
             }
         }
 
         return waterTrap;
     }
+
 
     public int firstCompleteIndex(int[] arr, int[][] mat) {
         int m = mat.length;
@@ -98,9 +101,10 @@ public class Dota {
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                coordinates.put(mat[i][j], new int[] { i, j });
+                coordinates.put(mat[i][j], new int[]{i, j});
             }
         }
+
 
         for (int i = 0; i < arr.length; i++) {
             int[] r = coordinates.get(arr[i]);
@@ -210,17 +214,39 @@ public class Dota {
         return res;
     }
 
+    public static void helperParenthesis(int n, int open, int close, List<String> res, StringBuilder curr) {
+        if(curr.length() == 2*n) {
+            res.add(curr.toString());
+            return;
+        }
+
+        if(open < n) {
+            helperParenthesis(n, open+1, close, res, new StringBuilder(curr).append('(') );
+        }
+
+        if(close < open) {
+            helperParenthesis(n, open, close+1, res, new StringBuilder(curr).append(')'));
+        }
+    }
+
+    public static List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        StringBuilder str = new StringBuilder();
+        helperParenthesis(n, 0, 0, res, str);
+        return res;
+    }
 
 
     public static void main(String[] args) {
         // System.out.println("welcome");
-        // int[][] grid = { {1, 0},{1,1} };
+        // int[][] grid =  { {1, 0},{1,1} };
         // System.out.println(gridGame(grid));
         // int[] bills = new int[]{5,5,10,10,20};
         // List<Integer> ls = new ArrayList<>();
         // System.out.println(countServers(grid));
-        int[] nums = new int[] { 0, 1, 2, 3, 4 };
-        int[] indexes = new int[] { 0, 1, 2, 2, 1 };
-        createTargetArray(nums, indexes);
+//        int[] nums = new int[]{0, 1, 2, 3, 4};
+//        int[] indexes = new int[]{0, 1, 2, 2, 1};
+//        createTargetArray(nums, indexes);
+        List<String> str = generateParenthesis(3);
     }
 }
