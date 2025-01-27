@@ -210,23 +210,6 @@ public class Dota {
         return res;
     }
 
-    public static boolean DFSTraversal(int src, int des, List<List<Integer>> graph) {
-        if (src == des) {
-            return true;
-        }
-
-        for (int neighbor : graph.get(src)) {
-            if (DFSTraversal(neighbor, des, graph)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, int[][] queries) {
-        List<Boolean> ans = new ArrayList<>();
-        List<List<Integer>> graph = new ArrayList<>();
 
         for (int i = 0; i < numCourses; i++) {
             graph.add(new ArrayList<>());
