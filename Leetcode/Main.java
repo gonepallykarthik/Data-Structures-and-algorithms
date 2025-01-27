@@ -533,4 +533,36 @@ public class Main {
         return dp[dp.length-1];
     }
 
+
+    public static List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> list = new LinkedList();
+
+        for (int i = 0; i < nums.length; i++) {
+            if (i == 0 || (i > 0 && nums[i] != nums[i - 1])) {
+                int low = i + 1;
+                int high = nums.length - 1;
+
+                while (low < high) {
+                    int Threesum = nums[i] + nums[low] + nums[high];
+
+                    if (Threesum < 0) {
+                        low++;
+                    } else if (Threesum > 0) {
+                        high--;
+                    } else {
+                        list.add(Arrays.asList(nums[i], nums[low], nums[high]));
+                        low++;
+                        while ((nums[low] == nums[low - 1]) && low < high) {
+                            low++;
+                        }
+                    }
+                }
+            }
+        }
+
+        return list;
+    }
+
+
 }
