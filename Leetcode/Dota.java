@@ -211,29 +211,6 @@ public class Dota {
     }
 
 
-        for (int i = 0; i < numCourses; i++) {
-            graph.add(new ArrayList<>());
-        }
-
-        for (int i = 0; i < prerequisites.length; i++) {
-            int p1 = prerequisites[i][0];
-            int p2 = prerequisites[i][1];
-            graph.get(p1).add(p2);
-        }
-
-        for (int i = 0; i < queries.length; i++) {
-            int src = queries[i][0];
-            int des = queries[i][1];
-
-            if (DFSTraversal(src, des, graph)) {
-                ans.add(true);
-            } else {
-                ans.add(false);
-            }
-        }
-
-        return ans;
-    }
 
     public static void main(String[] args) {
         // System.out.println("welcome");
