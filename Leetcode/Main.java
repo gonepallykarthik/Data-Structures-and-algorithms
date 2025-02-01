@@ -533,6 +533,35 @@ public class Main {
         return dp[dp.length-1];
     }
 
+    public int BFS(int row, int col, int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{row, col});
+        int total_fishes = 0;
+
+        while(!q.isEmpty()) {
+            int[] front = q.poll();
+            int r = front[0];
+            int c = front[1];
+
+            total_fishes += grid[r][c];
+            grid[r][c] = 0; // collect the fishes and mark as empty!
+            int[][] directions = new int[][]{ {-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+            
+            for(int[] dir : directions) {
+                int new_row = r + dir[0];
+                int new_col = c + dir[1];
+                if(new_row >=0 && new_col < m && new_col >=0 && new_col < n && grid[new_row][new_col] > 0) {
+                    q.add(new int[]{new_row, new_col});
+                }
+            }
+
+        }
+
+
+        return total_fishes;
+    }
 
     public static List<List<Integer>> threeSum(int[] nums) {
         Arrays.sort(nums);
@@ -564,5 +593,34 @@ public class Main {
         return list;
     }
 
+    public static int fn(int idx1, int idx2, String text1, String text2, int m, int n, int[][] dp) {
+        if(idx1 >=n || idx2 >= m) {
+            return 0;
+        }
+
+        if(dp[idx1][idx2] != -1) return dp[idx1][idx2];
+
+        if(text1.charAt(idx1) == text2.charAt(idx2)) {
+            return 1 + fn(idx1+1, idx2+1, text1, text2, m, n, dp);
+        }
+
+        int take = 0 + fn(idx1+1, idx2, text1, text2, m, n, dp);
+        int no_take = 0 + fn(idx1, idx2+1, text1, text2, m, n, dp);
+
+        return dp[idx1][idx2] = Math.max(take, no_take);
+    }
+
+    public static int longestCommonSubsequence(String text1, String text2) {
+        if(text1.equals(text2)) {
+            return text1.length();
+        }
+        int m = text1.length();
+        int n = text2.length();
+        int[][] dp = new int[m][n];
+        for(int i=0; i<dp.length; i++) {
+            Arrays.fill(dp[i], -1);
+        }
+        return fn(0, 0, text1, text2, m, n, dp);
+    }
 
 }
